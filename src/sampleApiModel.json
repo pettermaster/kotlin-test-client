@@ -1,0 +1,50 @@
+{
+  "rootUrl": "https:api.mychatapp.com/v1",
+  "userLevels": [
+    {
+      "name": "admin",
+      "authenticationMethod": {
+        "type": "JWT",
+        "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJpc0FkbWluIjp0cnVlLCJleHAiOjE1MTk3MzYzNzV9.DOQKxVHxC6CtLwhWFvLvC24Aql6mcx81Jl35WR668bI",
+        "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MjQ4MzAzNzV9.IIxkzp8O_AI5oaSimw4wPDbbUnOBgc0xg759h8gd64o"
+      }
+    },
+    {
+      "name": "user",
+      "authenticationMethod": {
+        "type": "JWT",
+        "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJpc0FkbWluIjpmYWxzZSwiZXhwIjoxNTE5NzM2NTU1fQ.0p0rtgh06ZkHPn3mRfeAditVl7AAedmrRaaEYEcIUwo",
+        "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MjQ4MzA1NTV9.qLAueEuEmBapUeYaYWx7fcVz9Ivu-VEvcHERpypsWLI"
+      }
+    }
+  ],
+  "endpoints": [
+    {
+      "relativePath": "/chats",
+      "endpointMethods": [
+        {
+          "httpMethod": "GET",
+          "queryParameters": [
+            "username",
+            "userId",
+            "password"
+          ]
+        },
+        {
+          "httpMethod": "POST",
+          "queryParameters": []
+        }
+      ],
+      "fields": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "participantIds",
+          "type": "[string]"
+        }
+      ]
+    }
+  ]
+}
