@@ -33,7 +33,7 @@ class ApiModelTest {
     }
 
     @Test
-    fun `it works` () {
+    fun `works` () {
         val testResult = ApiTest().doTest(apiModel)
         testResult.endpointTests.forEach {
             System.out.print("\n\t${it.endpoint.relativePath}")

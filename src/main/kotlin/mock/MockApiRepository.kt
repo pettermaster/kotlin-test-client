@@ -16,6 +16,10 @@ class MockApiRepository: ApiRepository {
 
     companion object {
         val key = MacProvider.generateKey()
+        val chats: MutableList<Chat> = mutableListOf(
+                Chat("chat1", listOf("user1")),
+                Chat("chat2", listOf("user1", "user2"))
+        )
 
         fun login(isAdmin: Boolean): JWT {
             val calendar = Calendar.getInstance()
@@ -38,13 +42,6 @@ class MockApiRepository: ApiRepository {
 
             return JWT(accessToken, refreshToken)
         }
-    }
-
-    lateinit var chats: MutableList<Chat>
-
-    init {
-        chats.add(Chat("chat1", listOf("user1")))
-        chats.add(Chat("chat2", listOf("user1", "user2")))
     }
 
     override fun createChat(chatJsonString: String, jwt: JWT): ApiResponse {
