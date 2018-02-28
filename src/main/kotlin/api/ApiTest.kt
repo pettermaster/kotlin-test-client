@@ -55,15 +55,6 @@ class ApiTest {
         }
 
 
-        fun doPostTest(endpoint: Endpoint) {
-            val chats = MockApiRepository().createChat(MockApiRepository.login(true))
-        }
-
-        private fun executeFieldTest(field: Field) {
-
-        }
-
-
     }
 
     fun doTest(apiModel: ApiModel): ApiModelTest {
