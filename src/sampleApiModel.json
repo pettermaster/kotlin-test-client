@@ -1,5 +1,5 @@
 {
-  "rootUrl": "https:api.mychatapp.com/v1",
+  "rootUrl": "https://api.mychatapp.com/v1",
   "userLevels": [
     {
       "name": "admin",
