@@ -3,9 +3,10 @@ package api
 import domain.ApiModel
 import domain.Endpoint
 import domain.EndpointMethod
-import domain.Field
-import dynamictest.*
-import mock.MockApiRepository
+import dynamictest.ApiModelTest
+import dynamictest.EndpointMethodTest
+import dynamictest.EndpointTest
+import dynamictest.QueryParameterTest
 
 class ApiTest {
 
@@ -14,7 +15,7 @@ class ApiTest {
         fun executeQueryParameterTest(queryParameter: String, dictionary: List<String>): QueryParameterTest {
             val matchingDictionaryEntries = mutableListOf<String>()
             dictionary.forEach {dictionaryEntry ->
-                if(dictionaryEntry.contains(queryParameter, true))
+                if(queryParameter.contains(dictionaryEntry, true))
                     matchingDictionaryEntries.add(dictionaryEntry)
             }
 
@@ -53,8 +54,6 @@ class ApiTest {
                     queryParameterTests
             )
         }
-
-
     }
 
     fun doTest(apiModel: ApiModel): ApiModelTest {
