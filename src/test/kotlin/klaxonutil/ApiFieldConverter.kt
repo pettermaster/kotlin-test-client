@@ -21,7 +21,7 @@ class ApiFieldConverter : Converter<Field> {
             val arrayType = removeFirstAndLastCharacter(fieldType)
             when(arrayType) {
                 "string" -> Field.ArrayField(fieldName, FieldType.STRING)
-                "string" -> Field.ArrayField(fieldName, FieldType.NUMBER)
+                "number" -> Field.ArrayField(fieldName, FieldType.NUMBER)
                 else -> throw Exception("Error parsing ApiModel, invalid array type $fieldType")
             }
         } else {
