@@ -4,6 +4,7 @@ import com.beust.klaxon.Converter
 import com.beust.klaxon.JsonValue
 import com.beust.klaxon.Klaxon
 import domain.AuthenticationMethod
+import domain.JWT
 
 class AuthenticationMethodConverter: Converter<AuthenticationMethod> {
 
@@ -17,9 +18,8 @@ class AuthenticationMethodConverter: Converter<AuthenticationMethod> {
     }
 
     private fun parseJWT(jv: JsonValue): AuthenticationMethod {
-        return AuthenticationMethod.JWT(
-                jv.objString("accessToken"),
-                jv.objString("refreshToken")
+        return AuthenticationMethod.JWTMethod(
+                JWT(jv.objString("accessToken"), jv.objString("refreshToken"))
         )
     }
 

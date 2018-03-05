@@ -30,7 +30,7 @@ class ApiModelTest {
     @Test
     fun `parses valid apimodel`() {
         val expectedApiRootUrl = "https://api.mychatapp.com/v1"
-        assert(apiModel.rootUrl.equals(expectedApiRootUrl), { "Expected ${expectedApiRootUrl}, got ${apiModel.rootUrl}" })
+        assert(apiModel.rootUrl == expectedApiRootUrl, { "Expected $expectedApiRootUrl, got ${apiModel.rootUrl}" })
     }
 
     @Test
