@@ -1,9 +1,10 @@
-import api.ApiTest
+import api.FieldTestExecutor
 import klaxonutil.ApiFieldConverter
 import com.beust.klaxon.Klaxon
 import domain.ApiModel
-import dynamictest.QueryParameterTest
-import klaxonutil.AuthenticationMethodConverter
+import domain.GetFieldTest
+import domain.PostFieldTest
+import domain.UserLevelTestResult
 import org.junit.BeforeClass
 import org.junit.Test
 import java.io.File
@@ -20,7 +21,6 @@ class ApiModelTest {
             val apiModelString = apiModelFile.readText()
             apiModel = Klaxon()
                     .converter(ApiFieldConverter())
-                    .converter(AuthenticationMethodConverter())
                     .parse<ApiModel>(
                             apiModelString
                     )!!
@@ -35,7 +35,7 @@ class ApiModelTest {
 
     @Test
     fun `works` () {
-        val testResult = ApiTest().doTest(apiModel)
+        val testResult = api.QueryParameterTestExecutor().doTest(apiModel)
         testResult.endpointTests.forEach {
             System.out.print("\n\t${it.endpoint.relativePath}")
             it.endpointMethodTests.forEach {
@@ -43,7 +43,7 @@ class ApiModelTest {
                 it.queryParameterTests.forEach {
                     System.out.print("\n\t\t\t")
                     when (it) {
-                        is QueryParameterTest.PossibleDangerousQueryParameter -> {
+                        is dynamictest.QueryParameterTest.PossibleDangerousQueryParameter -> {
                             System.out.print("Query parameter: ${it.queryParameter} DANGEROUS (dictionary match: ${it.matchingDictionaryEntries.first()})")
                         }
                         else -> {
@@ -52,6 +52,47 @@ class ApiModelTest {
                     }
                 }
             }
+        }
+    }
+
+    @Test
+    fun `FieldTestExecutor works` () {
+        val testResult = FieldTestExecutor().executeTest(apiModel)
+        testResult.endpointTestResults.forEach {
+            print("\n${it.relativePath}")
+            it.endpointMethodTestResults.forEach {
+                print("\n\t${it.httpMethod}")
+                it.userLevelTestResults.forEach {
+                    print("\n\t\t${it.userLevelName}")
+                    when(it) {
+                        is UserLevelTestResult.GetSuccess -> it.fieldTests.forEach {
+                            prettyPrintGetFieldTest(it)
+                        }
+                        is UserLevelTestResult.PostSuccess -> it.fieldTests.forEach {
+                            prettyPrintPostFieldTest(it)
+                        }
+                        is UserLevelTestResult.ServerError -> print("Error: ${it.serverResponse.errorMessage}. ResponseCode: ${it.serverResponse.responseCode}")
+                    }
+                }
+            }
+        }
+    }
+
+    fun prettyPrintGetFieldTest(it: GetFieldTest) {
+        print("\n\t\t\t")
+        if(it.isReadAble) {
+            print("${it.name} is readable")
+        } else {
+            print("${it.name} is not readable")
+        }
+    }
+
+    fun prettyPrintPostFieldTest(it: PostFieldTest) {
+        print("\n\t\t\t")
+        if(it.isWriteAble) {
+            print("${it.name} is writeable")
+        } else {
+            print("${it.name} is not writeable")
         }
     }
 

@@ -8,12 +8,12 @@ import dynamictest.EndpointMethodTest
 import dynamictest.EndpointTest
 import dynamictest.QueryParameterTest
 
-class ApiTest {
+class QueryParameterTestExecutor {
 
     companion object {
 
         fun executeQueryParameterTest(queryParameter: String, dictionary: List<String>): QueryParameterTest {
-            val matchingDictionaryEntries = mutableListOf<String>()
+            val matchingDictionaryEntries = mutableSetOf<String>()
             dictionary.forEach {dictionaryEntry ->
                 if(queryParameter.contains(dictionaryEntry, true))
                     matchingDictionaryEntries.add(dictionaryEntry)

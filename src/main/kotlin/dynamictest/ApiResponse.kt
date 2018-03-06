@@ -1,6 +1,8 @@
 package dynamictest
 
-sealed class ApiResponse {
-    class Success(val jsonString: String): ApiResponse()
-    class Error(val responseCode: ResponseCode, val errorMessage: String): ApiResponse()
+import domain.HttpMethod
+
+sealed class ApiResponse(val httpMethod: HttpMethod) {
+    class Success(httpMethod: HttpMethod, val jsonString: String): ApiResponse(httpMethod)
+    class Error(httpMethod: HttpMethod, val responseCode: ResponseCode, val errorMessage: String): ApiResponse(httpMethod)
 }

@@ -2,24 +2,24 @@ package domain
 
 data class ApiModel(
         val rootUrl: String,
-        val endpoints: List<Endpoint>,
-        val userLevels: List<UserLevel>
+        val endpoints: Set<Endpoint>,
+        val userLevels: Set<UserLevel>
 )
 
 data class Endpoint(
         val relativePath: String,
-        val endpointMethods: List<EndpointMethod>,
-        val fields: List<Field>
+        val endpointMethods: Set<EndpointMethod>,
+        val fields: Set<Field>
 )
 
 data class EndpointMethod(
         val httpMethod: HttpMethod,
-        val queryParameters: List<String>
+        val queryParameters: Set<String>
 )
 
-sealed class Field(val name: String) {
-    class SimpleField(name: String, val fieldType: FieldType): Field(name)
-    class ArrayField(name: String, val arrayType: FieldType): Field(name)
+sealed class Field(val name: String, val fieldType: FieldType) {
+    class SimpleField(name: String, fieldType: FieldType): Field(name, fieldType)
+    class ArrayField(name: String, arrayType: FieldType ): Field(name, arrayType)
 }
 
 enum class FieldType(val value: String) {
@@ -34,12 +34,8 @@ enum class HttpMethod{
 
 data class UserLevel(
         val name: String,
-        val authenticationMethod: AuthenticationMethod
+        val jwt: JWT
 )
-
-sealed class AuthenticationMethod {
-    data class JWTMethod(val jwt: JWT) : AuthenticationMethod()
-}
 
 data class JWT(
         val accessToken: String,
