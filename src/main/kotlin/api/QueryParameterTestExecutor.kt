@@ -19,13 +19,10 @@ class QueryParameterTestExecutor {
                     matchingDictionaryEntries.add(dictionaryEntry)
             }
 
-            if (matchingDictionaryEntries.size > 0) {
-                return QueryParameterTest.PossibleDangerousQueryParameter(
+            return when (matchingDictionaryEntries.size) {
+                0 -> QueryParameterTest.PassedQueryParameterTest(queryParameter)
+                else -> QueryParameterTest.PossibleDangerousQueryParameter(
                         matchingDictionaryEntries,
-                        queryParameter
-                )
-            } else {
-                return QueryParameterTest.PassedQueryParameterTest(
                         queryParameter
                 )
             }

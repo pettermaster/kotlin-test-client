@@ -9,13 +9,12 @@ import dynamictest.ApiResponse
 import dynamictest.ResponseCode
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
-import io.jsonwebtoken.impl.crypto.MacProvider
 import java.util.*
 
 class MockApiRepository: ApiRepository {
 
     companion object {
-        val key = MacProvider.generateKey()
+        val secret = "secret"
         val chats: MutableList<Chat> = mutableListOf(
                 Chat("chat1", listOf("user1")),
                 Chat("chat2", listOf("user1", "user2"))
@@ -30,14 +29,14 @@ class MockApiRepository: ApiRepository {
                             Pair("isAdmin", isAdmin)
                     ))
                     .setExpiration(calendar.time)
-                    .signWith(SignatureAlgorithm.HS256, key)
+                    .signWith(SignatureAlgorithm.HS512, secret)
                     .compact()
 
             calendar.add(Calendar.DAY_OF_YEAR, 59)
 
             val refreshToken = Jwts.builder()
                     .setExpiration(calendar.time)
-                    .signWith(SignatureAlgorithm.HS256, key)
+                    .signWith(SignatureAlgorithm.HS512, secret)
                     .compact()
 
             return JWT(accessToken, refreshToken)
