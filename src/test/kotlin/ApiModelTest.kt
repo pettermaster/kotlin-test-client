@@ -44,7 +44,7 @@ class ApiModelTest {
                     System.out.print("\n\t\t\t")
                     when (it) {
                         is dynamictest.QueryParameterTest.PossibleDangerousQueryParameter -> {
-                            System.out.print("Query parameter: ${it.queryParameter} DANGEROUS (dictionary match: ${it.matchingDictionaryEntries.first()})")
+                            System.out.print("Query parameter: ${it.queryParameter} DANGEROUS (testSuite match: ${it.matchingDictionaryEntries.first()})")
                         }
                         else -> {
                             System.out.print("Query parameter: ${it.queryParameter} not dangerous")

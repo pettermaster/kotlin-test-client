@@ -29,13 +29,15 @@ class MockApiRepository: ApiRepository {
                             Pair("isAdmin", isAdmin)
                     ))
                     .setExpiration(calendar.time)
+                    .setIssuedAt(Date())
                     .signWith(SignatureAlgorithm.HS512, secret)
                     .compact()
 
-            calendar.add(Calendar.DAY_OF_YEAR, 59)
+            calendar.add(Calendar.DAY_OF_YEAR, 90)
 
             val refreshToken = Jwts.builder()
                     .setExpiration(calendar.time)
+                    .setIssuedAt(Date())
                     .signWith(SignatureAlgorithm.HS512, secret)
                     .compact()
 

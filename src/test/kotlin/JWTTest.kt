@@ -3,6 +3,7 @@ import api.JWTTestResult
 import com.beust.klaxon.Klaxon
 import domain.ApiModel
 import klaxonutil.ApiFieldConverter
+import mock.MockApiRepository
 import org.junit.BeforeClass
 import org.junit.Test
 import java.io.File
@@ -25,8 +26,15 @@ class JWTTest {
     }
 
     @Test
+    fun `Create JWT`() {
+        val adminJWT = MockApiRepository.login(true)
+        val userJWT = MockApiRepository.login(false)
+    }
+
+    @Test
     fun `runs jwt test` () {
         apiModel.userLevels.forEach {
+            print("\n${it.name.toUpperCase()} token")
             val testResult = JWTTestExecutor.executeTest(it.jwt)
             testResult.jwtTests.forEach {
                 when (it) {
@@ -37,9 +45,9 @@ class JWTTest {
     }
 
     fun logFailedJwtTest(it: JWTTestResult.Failed) {
-        print("\n${it.name}")
-        print("\n\t${it.description}")
-        print("\n\t${it.errorMessage}")
+        print("\n\t${it.name}")
+        print("\n\t\t${it.description}")
+        print("\n\t\t${it.errorMessage}")
     }
 
 }
