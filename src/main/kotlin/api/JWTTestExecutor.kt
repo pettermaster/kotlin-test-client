@@ -99,7 +99,7 @@ class JWTTestExecutor {
                     return JWTTestResult.Failed(
                             testName,
                             testDescription,
-                            "The jwt is signed using the known secret $it")
+                            "The JWT is signed using the known secret $it")
                 }
             }
             return JWTTestResult.Passed(
