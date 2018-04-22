@@ -34,7 +34,7 @@ class ApiModelTest {
     }
 
     @Test
-    fun `works` () {
+    fun `test query parameters` () {
         val testResult = api.QueryParameterTestExecutor().doTest(apiModel)
         testResult.endpointTests.forEach {
             System.out.print("\n\t${it.endpoint.relativePath}")
@@ -56,8 +56,8 @@ class ApiModelTest {
     }
 
     @Test
-    fun `FieldTestExecutor works` () {
-        val testResult = FieldTestExecutor().executeTest(apiModel)
+    fun `test model fields` () {
+        val testResult = FieldTestExecutor.executeTest(apiModel)
         testResult.endpointTestResults.forEach {
             print("\n${it.relativePath}")
             it.endpointMethodTestResults.forEach {

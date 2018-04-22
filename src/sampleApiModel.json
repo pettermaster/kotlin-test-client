@@ -45,6 +45,29 @@
           "type": "[string]"
         }
       ]
+    },
+    {
+      "relativePath": "users",
+      "endpointMethods": [
+        {
+          "httpMethod": "GET",
+          "queryParameters": []
+        }
+      ],
+      "fields": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "email",
+          "type": "string"
+        },
+        {
+          "name": "phoneNumber",
+          "type": "string"
+        }
+      ]
     }
   ]
 }

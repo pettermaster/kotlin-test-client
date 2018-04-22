@@ -20,6 +20,11 @@ class MockApiRepository: ApiRepository {
                 Chat("chat2", listOf("user1", "user2"))
         )
 
+        val users = mutableListOf<User>(
+                User("Petter", "petter@gmail.com", "12345678"),
+                User("Edvard", "edvard@gmail.com", "23456781")
+        )
+
         fun login(isAdmin: Boolean): JWT {
             val calendar = Calendar.getInstance()
             calendar.add(Calendar.DAY_OF_YEAR, 1)
@@ -54,6 +59,7 @@ class MockApiRepository: ApiRepository {
         }
         return when (relativePath) {
             "chats" -> ApiResponse.Success(HttpMethod.GET, Klaxon().toJsonString(chats))
+            "users" -> ApiResponse.Success(HttpMethod.GET, Klaxon().toJsonString(users))
             else -> ApiResponse.Error(HttpMethod.GET, ResponseCode.NOT_FOUND, "Endpoint not found in MockRepository")
         }
     }

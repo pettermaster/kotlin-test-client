@@ -4,6 +4,8 @@ import domain.JWT
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import mock.MockApiRepository
+import sun.net.util.URLUtil
+import java.net.URL
 import java.util.*
 
 
@@ -17,12 +19,9 @@ class JWTTestExecutor {
             val suggestedExpirationInHours = 12
 
             val decodedAccessToken = com.auth0.jwt.JWT.decode(accessToken)
-            val tokenExpiration = decodedAccessToken.expiresAt
-            val expiresCalendar = Calendar.getInstance()
-            expiresCalendar.time = tokenExpiration
             val issuedAtMilliSeconds = decodedAccessToken.issuedAt.time
             val expiresAtMilliSeconds = decodedAccessToken.expiresAt.time
-            val expirationInHours = (expiresAtMilliSeconds - issuedAtMilliSeconds).toInt() / (60 * 60 * 1000)
+            val expirationInHours = ((expiresAtMilliSeconds - issuedAtMilliSeconds) / (60 * 60 * 1000)).toInt()
             if(expirationInHours > suggestedExpirationInHours) {
                 return JWTTestResult.Failed(
                         testName,
@@ -76,7 +75,10 @@ class JWTTestExecutor {
         }
 
         fun testTokenSecret(token: String, testName: String, testDescription: String): JWTTestResult {
-            val knownSecrets = listOf(MockApiRepository.secret)
+            val knownSecrets = listOf(
+                    "notsecret",
+                    MockApiRepository.secret
+            )
 
             val decodedAccessToken = com.auth0.jwt.JWT.decode(token)
             val issuedAt = decodedAccessToken.issuedAt

@@ -24,7 +24,8 @@ sealed class Field(val name: String, val fieldType: FieldType) {
 
 enum class FieldType(val value: String) {
     STRING("string"),
-    NUMBER("number")
+    NUMBER("number"),
+    BOOLEAN("boolean")
 }
 
 enum class HttpMethod{
