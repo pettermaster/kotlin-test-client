@@ -19,7 +19,7 @@ data class EndpointMethod(
 
 sealed class Field(val name: String, val fieldType: FieldType) {
     class SimpleField(name: String, fieldType: FieldType): Field(name, fieldType)
-    class ArrayField(name: String, arrayType: FieldType ): Field(name, arrayType)
+    class ArrayField(name: String, arrayType: FieldType): Field(name, arrayType)
 }
 
 enum class FieldType(val value: String) {

@@ -1,11 +1,11 @@
-import api.JWTTestExecutor
-import api.JWTTestResult
-import com.beust.klaxon.Klaxon
 import domain.ApiModel
+import com.beust.klaxon.Klaxon
 import klaxonutil.ApiFieldConverter
-import mock.MockApiRepository
+import api.mock.MockApiRepository
 import org.junit.BeforeClass
 import org.junit.Test
+import static.JWTTestResult
+import static.executeStaticJWTTest
 import java.io.File
 
 class JWTTest {
@@ -29,13 +29,15 @@ class JWTTest {
     fun `Create JWT`() {
         val adminJWT = MockApiRepository.login(true)
         val userJWT = MockApiRepository.login(false)
+        print(adminJWT)
+        print("\n$userJWT")
     }
 
     @Test
     fun `runs jwt test` () {
         apiModel.userLevels.forEach {
             print("\n${it.name.toUpperCase()} token")
-            val testResult = JWTTestExecutor.executeTest(it.jwt)
+            val testResult = executeStaticJWTTest(it.jwt)
             testResult.jwtTests.forEach {
                 when (it) {
                     is JWTTestResult.Failed -> logFailedJwtTest(it)

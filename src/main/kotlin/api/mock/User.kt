@@ -1,4 +1,4 @@
-package mock
+package api.mock
 
 data class User(
         val name: String,
