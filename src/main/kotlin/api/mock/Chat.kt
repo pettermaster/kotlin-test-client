@@ -1,4 +1,4 @@
-package mock
+package api.mock
 
 data class Chat(
         val name: String,

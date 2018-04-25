@@ -1,7 +1,5 @@
 package domain
 
-import dynamictest.ApiResponse
-
 data class FieldTestResult(val endpointTestResults: List<EndpointTestResult>)
 
 data class EndpointTestResult(

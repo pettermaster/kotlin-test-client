@@ -1,12 +1,14 @@
-import api.FieldTestExecutor
 import klaxonutil.ApiFieldConverter
 import com.beust.klaxon.Klaxon
 import domain.ApiModel
+import domain.QueryParameterTest
 import domain.GetFieldTest
 import domain.PostFieldTest
 import domain.UserLevelTestResult
+import dynamic.executeDynamicApiModelTest
 import org.junit.BeforeClass
 import org.junit.Test
+import static.ApiModelTestExecutor
 import java.io.File
 
 class ApiModelTest {
@@ -34,8 +36,13 @@ class ApiModelTest {
     }
 
     @Test
-    fun `works` () {
-        val testResult = api.QueryParameterTestExecutor().doTest(apiModel)
+    fun `test query parameters` () {
+        val queryParameterDict = setOf(
+                "id",
+                "password"
+        )
+
+        val testResult = ApiModelTestExecutor().executeTest(apiModel, queryParameterDict)
         testResult.endpointTests.forEach {
             System.out.print("\n\t${it.endpoint.relativePath}")
             it.endpointMethodTests.forEach {
@@ -43,7 +50,7 @@ class ApiModelTest {
                 it.queryParameterTests.forEach {
                     System.out.print("\n\t\t\t")
                     when (it) {
-                        is dynamictest.QueryParameterTest.PossibleDangerousQueryParameter -> {
+                        is QueryParameterTest.PossibleDangerousQueryParameter -> {
                             System.out.print("Query parameter: ${it.queryParameter} DANGEROUS (testSuite match: ${it.matchingDictionaryEntries.first()})")
                         }
                         else -> {
@@ -51,13 +58,16 @@ class ApiModelTest {
                         }
                     }
                 }
+                if(it.queryParameterTests.isEmpty()) {
+                    System.out.print("\n\t\t\tNo query parameters")
+                }
             }
         }
     }
 
     @Test
-    fun `FieldTestExecutor works` () {
-        val testResult = FieldTestExecutor().executeTest(apiModel)
+    fun `test model fields` () {
+        val testResult = executeDynamicApiModelTest(apiModel)
         testResult.endpointTestResults.forEach {
             print("\n${it.relativePath}")
             it.endpointMethodTestResults.forEach {

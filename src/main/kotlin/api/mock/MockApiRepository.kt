@@ -1,17 +1,17 @@
-package mock
+package api.mock
 
-import api.ApiRepository
+import api.API
 import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Klaxon
 import domain.HttpMethod
 import domain.JWT
-import dynamictest.ApiResponse
-import dynamictest.ResponseCode
+import domain.ApiResponse
+import domain.ResponseCode
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import java.util.*
 
-class MockApiRepository: ApiRepository {
+class MockApiRepository: API {
 
     companion object {
         val secret = "secret"
@@ -20,13 +20,20 @@ class MockApiRepository: ApiRepository {
                 Chat("chat2", listOf("user1", "user2"))
         )
 
+        val users = mutableListOf(
+                User("Petter", "petter@gmail.com", "12345678"),
+                User("Edvard", "edvard@gmail.com", "23456781")
+        )
+
         fun login(isAdmin: Boolean): JWT {
             val calendar = Calendar.getInstance()
             calendar.add(Calendar.DAY_OF_YEAR, 1)
 
             val accessToken = Jwts.builder()
                     .addClaims(mapOf(
-                            Pair("isAdmin", isAdmin)
+                            Pair("isAdmin", isAdmin),
+                            Pair("email", "petter@gmail.com"),
+                            Pair("phoneNumber", "12345678")
                     ))
                     .setExpiration(calendar.time)
                     .setIssuedAt(Date())
@@ -54,6 +61,7 @@ class MockApiRepository: ApiRepository {
         }
         return when (relativePath) {
             "chats" -> ApiResponse.Success(HttpMethod.GET, Klaxon().toJsonString(chats))
+            "users" -> ApiResponse.Success(HttpMethod.GET, Klaxon().toJsonString(users))
             else -> ApiResponse.Error(HttpMethod.GET, ResponseCode.NOT_FOUND, "Endpoint not found in MockRepository")
         }
     }
