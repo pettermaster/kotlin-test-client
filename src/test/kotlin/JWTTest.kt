@@ -49,8 +49,8 @@ class JWTTest {
     }
 
     fun logFailedJwtTest(it: JWTTestResult.Failed) {
-        print("\n\t${it.name}")
-        print("\n\t\t${it.description}")
+        print("\n\t${it.testName}")
+        print("\n\t\t${it.testDescription}")
         print("\n\t\t${it.errorMessage}")
     }
 

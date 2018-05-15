@@ -12,22 +12,22 @@ class InsecureDurationTest {
         @BeforeClass
         @JvmStatic
         fun setup() {
-            apiSpecification = parseApiModelFromPath("/Users/petteriversen/Documents/master/kotlin-client/src/sampleApiModel.json")
+            apiSpecification = parseApiModelFromPath("/Users/petteriversen/Documents/master/kotlin-client/src/unsignedTokenApiModel.json")
         }
     }
 
     @Test
-    fun `Insecure expiration time` () {
+    fun `Unsigned JWT` () {
         val testExecutor = StaticJWTTestExecutor(StaticJWTTestConfiguration())
 
         apiSpecification.userLevels.forEach {
             print("\n${it.name}")
-            val accessTokenResult = testExecutor.testAccessTokenExpiration(it.jwt.accessToken)
+            val accessTokenResult = testExecutor.testUnsignedToken(it.jwt.accessToken, "access token")
             when (accessTokenResult) {
                 is JWTTestResult.Failed -> logFailedJwtTest(accessTokenResult)
             }
 
-            val refreshTokenResult = testExecutor.testRefreshTokenExpiration(it.jwt.refreshToken)
+            val refreshTokenResult = testExecutor.testUnsignedToken(it.jwt.refreshToken, "refresh token")
             when (refreshTokenResult) {
                 is JWTTestResult.Failed -> logFailedJwtTest(refreshTokenResult)
             }
@@ -35,8 +35,8 @@ class InsecureDurationTest {
     }
 
     fun logFailedJwtTest(it: JWTTestResult.Failed) {
-        print("\n\t${it.name}")
-        print("\n\t\tVulnerability description: ${it.description}")
+        print("\n\t${it.testName}")
+        print("\n\t\tVulnerability testDescription: ${it.testDescription}")
         print("\n\t\tError: ${it.errorMessage}")
     }
 

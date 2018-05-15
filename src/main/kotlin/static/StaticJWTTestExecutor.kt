@@ -29,7 +29,9 @@ class StaticJWTTestExecutor(val testConfiguration: StaticJWTTestConfiguration) {
             JWTTestSuiteEntry { testRefreshTokenExpiration(it.refreshToken) },
             JWTTestSuiteEntry { testTokenSecret(it.accessToken, "access token") },
             JWTTestSuiteEntry { testTokenSecret(it.refreshToken, "refresh token") },
-            JWTTestSuiteEntry { testTokenPayload(it.accessToken, "access token" )}
+            JWTTestSuiteEntry { testTokenPayload(it.accessToken, "access token" )},
+            JWTTestSuiteEntry { testUnsignedToken(it.accessToken, "access token") },
+            JWTTestSuiteEntry { testUnsignedToken(it.refreshToken, "refresh token") }
     )
 
     fun executeStaticJWTTest(jwt: JWT): StaticJWTAnalysisResult {
@@ -170,12 +172,33 @@ class StaticJWTTestExecutor(val testConfiguration: StaticJWTTestConfiguration) {
         }
         return claimsMap
     }
+
+    fun testUnsignedToken(token: String, tokenTypeDescription: String): JWTTestResult {
+        val testName = "No unsigned token"
+        val testDescription = "Secure JWTs must be signed using one of the known algorithms."
+        val decodedAccessToken = com.auth0.jwt.JWT.decode(token)
+        val decodedHeader = createClaimMapFromBase64EncodedJson(decodedAccessToken.header)
+        val alg = decodedHeader.getValue("alg")
+        if(alg.equals("none")) {
+            return JWTTestResult.Failed(
+                testName,
+                    testDescription,
+                    "JWT header field alg is none, token is not secure"
+            )
+        } else {
+            return JWTTestResult.Passed(
+                    testName,
+                    testDescription
+            )
+        }
+
+    }
 }
 
 data class StaticJWTAnalysisResult(val jwtTests: List<JWTTestResult>)
-sealed class JWTTestResult(val name: String, val description: String) {
-    class Passed(name: String, description: String) : JWTTestResult(name, description)
-    class Failed(name: String, description: String, val errorMessage: String) : JWTTestResult(name, description)
+sealed class JWTTestResult(val testName: String, val testDescription: String) {
+    class Passed(testName: String, testDescription: String) : JWTTestResult(testName, testDescription)
+    class Failed(testName: String, testDescription: String, val errorMessage: String) : JWTTestResult(testName, testDescription)
 }
 
 data class JWTTestSuiteEntry(val testExecutor: (jwt: JWT) -> JWTTestResult)

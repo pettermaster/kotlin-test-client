@@ -21,7 +21,7 @@ class ExposedSensitiveDataTest {
         val testConfiguration = StaticJWTTestConfiguration(sensitivePayloadFields = setOf(
                 "email",
                 "password",
-                "name"
+                "testName"
         ))
         val testExecutor = StaticJWTTestExecutor(testConfiguration)
 
@@ -40,8 +40,8 @@ class ExposedSensitiveDataTest {
     }
 
     fun logFailedJwtTest(it: JWTTestResult.Failed) {
-        print("\n\t${it.name}")
-        print("\n\t\tVulnerability description: ${it.description}")
+        print("\n\t${it.testName}")
+        print("\n\t\tVulnerability testDescription: ${it.testDescription}")
         print("\n\t\tError: ${it.errorMessage}")
     }
 
