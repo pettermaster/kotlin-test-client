@@ -11,13 +11,32 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import java.util.*
 
-class MockApiRepository: API {
+class MockBuggedAccessLevelRepository: API {
 
     companion object {
         val secret = "secret"
-        val chats: MutableList<Chat> = mutableListOf(
-                Chat("chat1", listOf("user1")),
-                Chat("chat2", listOf("user1", "user2"))
+        val quizzes: MutableList<Quiz> = mutableListOf(
+                Quiz(
+                        "Easy quiz",
+                        listOf(
+                                MultipleChoiceQuestion(
+                                        "What is 2+2?",
+                                        listOf(
+                                                QuestionAlternative("2", false),
+                                                QuestionAlternative("4", true),
+                                                QuestionAlternative("6", false)
+                                        )
+                                ),
+                                MultipleChoiceQuestion(
+                                        "What is the capital of Norway?",
+                                        listOf(
+                                                QuestionAlternative("Oslo", true),
+                                                QuestionAlternative("Bergen", false),
+                                                QuestionAlternative("Trondheim", false)
+                                        )
+                                )
+                        )
+                )
         )
 
         val users = mutableListOf(
@@ -27,7 +46,7 @@ class MockApiRepository: API {
 
         fun login(isAdmin: Boolean): JWT {
             val calendar = Calendar.getInstance()
-            calendar.add(Calendar.DAY_OF_YEAR, 1)
+            calendar.add(Calendar.HOUR_OF_DAY, 1)
 
             val accessToken = Jwts.builder()
                     .addClaims(mapOf(
@@ -40,7 +59,7 @@ class MockApiRepository: API {
                     .signWith(SignatureAlgorithm.HS512, secret)
                     .compact()
 
-            calendar.add(Calendar.DAY_OF_YEAR, 90)
+            calendar.add(Calendar.DAY_OF_YEAR, 60)
 
             val refreshToken = Jwts.builder()
                     .setExpiration(calendar.time)
@@ -56,11 +75,8 @@ class MockApiRepository: API {
         if(!validJwt(jwt)) {
             return ApiResponse.Error(HttpMethod.GET, ResponseCode.UNAUTHORIZED, "Invalid token")
         }
-        if(!validAdmin(jwt)) {
-            return ApiResponse.Error(HttpMethod.GET, ResponseCode.FORBIDDEN, "Not an administrator")
-        }
         return when (relativePath) {
-            "chats" -> ApiResponse.Success(HttpMethod.GET, Klaxon().toJsonString(chats))
+            "quizzes" -> ApiResponse.Success(HttpMethod.GET, Klaxon().toJsonString(quizzes))
             "users" -> ApiResponse.Success(HttpMethod.GET, Klaxon().toJsonString(users))
             else -> ApiResponse.Error(HttpMethod.GET, ResponseCode.NOT_FOUND, "Endpoint not found in MockRepository")
         }
@@ -86,3 +102,18 @@ class MockApiRepository: API {
         return true
     }
 }
+
+data class Quiz(
+        val name: String,
+        val questions: List<MultipleChoiceQuestion>
+)
+
+data class MultipleChoiceQuestion(
+        val questionText: String,
+        val options: List<QuestionAlternative>
+)
+
+data class QuestionAlternative (
+        val optionText: String,
+        val isCorrect: Boolean
+)

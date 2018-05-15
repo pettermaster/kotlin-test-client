@@ -1,0 +1,19 @@
+{
+  "rootUrl": "https://wsg.t-mobile.com/permissionManagement/v1",
+  "userLevels": [],
+  "endpoints": [
+    {
+      "relativePath": "user/lines",
+      "endpointMethods": [
+        {
+          "httpMethod": "GET",
+          "queryParameters": [
+            "access_token",
+            "msisdn"
+          ]
+        }
+      ],
+      "fields": []
+    }
+  ]
+}

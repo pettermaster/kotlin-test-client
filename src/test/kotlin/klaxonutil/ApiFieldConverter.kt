@@ -23,14 +23,14 @@ class ApiFieldConverter : Converter<Field> {
                 "string" -> Field.ArrayField(fieldName, FieldType.STRING)
                 "number" -> Field.ArrayField(fieldName, FieldType.NUMBER)
                 FieldType.BOOLEAN.toString() -> Field.ArrayField(fieldName, FieldType.BOOLEAN)
-                else -> throw Exception("Error parsing ApiModel, invalid array type $fieldType")
+                else -> throw Exception("Error parsing ApiSpecification, invalid array type $fieldType")
             }
         } else {
             when(fieldType) {
                 "string" -> Field.SimpleField(fieldName, FieldType.STRING)
                 "number" -> Field.SimpleField(fieldName, FieldType.NUMBER)
                 FieldType.BOOLEAN.toString() -> Field.SimpleField(fieldName, FieldType.BOOLEAN)
-                else -> throw Exception("Error parsing ApiModel, invalid field type $fieldType")
+                else -> throw Exception("Error parsing ApiSpecification, invalid field type $fieldType")
             }
         }
     }

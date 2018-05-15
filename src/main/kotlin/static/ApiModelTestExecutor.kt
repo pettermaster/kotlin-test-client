@@ -1,6 +1,6 @@
 package static
 
-import domain.ApiModel
+import domain.ApiSpecification
 import domain.Endpoint
 import domain.EndpointMethod
 import domain.ApiModelTest
@@ -12,9 +12,9 @@ class ApiModelTestExecutor {
 
     lateinit var queryParameterDictionary: Set<String>
 
-    fun executeTest(apiModel: ApiModel, queryParameterDictionary: Set<String>): ApiModelTest {
+    fun executeTest(apiSpecification: ApiSpecification, queryParameterDictionary: Set<String>): ApiModelTest {
         this.queryParameterDictionary = queryParameterDictionary
-        val endpointTests = apiModel.endpoints.map({
+        val endpointTests = apiSpecification.endpoints.map({
             executeEndpointTest(it)
         })
         return ApiModelTest(endpointTests)

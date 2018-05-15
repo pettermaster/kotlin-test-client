@@ -9,7 +9,7 @@ import static.StaticJWTTestConfiguration
 import static.StaticJWTTestExecutor
 import java.io.File
 
-class JWTTest {
+class JWTSpoofingTest {
 
     companion object {
         lateinit var apiSpecification: ApiSpecification
@@ -35,23 +35,28 @@ class JWTTest {
     }
 
     @Test
-    fun `runs jwt test` () {
-        val staticJWTTestExecutor = StaticJWTTestExecutor(StaticJWTTestConfiguration())
+    fun `JWTSpoofing test` () {
+        val testConfiguration = StaticJWTTestConfiguration()
+        val testExecutor = StaticJWTTestExecutor(testConfiguration)
+
         apiSpecification.userLevels.forEach {
-            print("\n${it.name.toUpperCase()} token")
-            val testResult = staticJWTTestExecutor.executeStaticJWTTest(it.jwt)
-            testResult.jwtTests.forEach {
-                when (it) {
-                    is JWTTestResult.Failed -> logFailedJwtTest(it)
-                }
+            print("\n${it.name}")
+            val accessTokenResult = testExecutor.testTokenSecret(it.jwt.accessToken, "access token")
+            when (accessTokenResult) {
+                is JWTTestResult.Failed -> logFailedJwtTest(accessTokenResult)
+            }
+
+            val refreshTokenResult = testExecutor.testTokenSecret(it.jwt.refreshToken, "refresh token")
+            when (refreshTokenResult) {
+                is JWTTestResult.Failed -> logFailedJwtTest(refreshTokenResult)
             }
         }
     }
 
     fun logFailedJwtTest(it: JWTTestResult.Failed) {
         print("\n\t${it.name}")
-        print("\n\t\t${it.description}")
-        print("\n\t\t${it.errorMessage}")
+        print("\n\t\tVulnerability description: ${it.description}")
+        print("\n\t\tError: ${it.errorMessage}")
     }
 
 }
