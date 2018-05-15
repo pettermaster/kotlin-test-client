@@ -47,7 +47,7 @@ class ApiModelTestExecutor {
         val matchingDictionaryEntries = mutableSetOf<String>()
 
         queryParameterDictionary.forEach {dictionaryEntry ->
-            val isDictionaryEntryInQueryParameter = queryParameter.contains(dictionaryEntry, true)
+            val isDictionaryEntryInQueryParameter = queryParameter.contains(dictionaryEntry, true) || dictionaryEntry.contains(queryParameter, true)
             if(isDictionaryEntryInQueryParameter) {
                 matchingDictionaryEntries.add(dictionaryEntry)
             }
