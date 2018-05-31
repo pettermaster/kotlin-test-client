@@ -5,6 +5,6 @@ import domain.ApiResponse
 import domain.JWT
 
 interface API {
-    fun get(relativePath: String, jwt: JWT): ApiResponse
-    fun post(relativePath: String, jwt: JWT, requestBody: JsonObject): ApiResponse
+    fun get(relativePath: String, accessToken: String): ApiResponse
+    fun post(relativePath: String, accessToken: String, requestBody: JsonObject): ApiResponse
 }

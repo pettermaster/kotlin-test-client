@@ -1,0 +1,51 @@
+{
+  "rootUrl": "https://api.quizapp.com/v1",
+  "userLevels": [
+    {
+      "name": "admin",
+      "jwt": {
+        "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJuYW1lIjoiRWR2YXJkIiwiZW1haWwiOiJlZHZhcmRAZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiIyMzQ1Njc4MSIsImFkbWluIjp0cnVlLCJleHAiOjE1MjgyOTM2MDAsImlhdCI6MTUyNjk3OTYwMH0.fkAKKTSc0C8ZU0WAZuQqzFIxtqY3WyHx0Tm7d6Meg40oDUYTAPSFmIjMc4Fjoj2ux3wQAYgGGWlIzGTarYZVbQ",
+        "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjIwNDY2OTcyMDAsImlhdCI6MTUyNjk3OTYwMH0.rCnWoKrtJVL6W8Sla6RR9MK__tdk3ClvxNu4FHw3S6-0rxGTdFUdnkYckBuey2as-ybe3auFKMzCbd-uxa2qDw"
+      }
+    },
+    {
+      "name": "user",
+      "jwt": {
+        "type": "JWT",
+        "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJuYW1lIjoiUGV0dGVyIiwiZW1haWwiOiJwZXR0ZXJAZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiIxMjM0NTY3OCIsImFkbWluIjpmYWxzZSwiZXhwIjoxNTI4MjkzNjAwLCJpYXQiOjE1MjY5Nzk2MDB9._vCno5374c7FqJQv688o-RlgKkUYSKm-bsc64w7UmYOHPpvbvNfj2qdpYjWwp3VT0h2B5cdSPHhQ7kIu5qnqhw",
+        "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjIwNDY2OTcyMDAsImlhdCI6MTUyNjk3OTYwMH0.rCnWoKrtJVL6W8Sla6RR9MK__tdk3ClvxNu4FHw3S6-0rxGTdFUdnkYckBuey2as-ybe3auFKMzCbd-uxa2qDw"
+      }
+    }
+  ],
+  "endpoints": [
+    {
+      "relativePath": "quizzes",
+      "endpointMethods": [
+        {
+          "httpMethod": "GET",
+          "queryParameters": []
+        }
+      ],
+      "fields": []
+    },
+    {
+      "relativePath": "assignments",
+      "endpointMethods": [
+        {
+          "httpMethod": "POST",
+          "queryParameters": []
+        }
+      ],
+      "fields": [
+        {
+          "name": "text",
+          "type": "string"
+        },
+        {
+          "name": "assignmentStatus",
+          "type": "number"
+        }
+      ]
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 import domain.ApiSpecification
 import com.beust.klaxon.Klaxon
 import klaxonutil.ApiFieldConverter
-import api.mock.MockChatApiRepository
+import api.mock.MockChatApi
 import org.junit.BeforeClass
 import org.junit.Test
 import static.JWTTestResult
@@ -28,8 +28,8 @@ class JWTSpoofingTest {
 
     @Test
     fun `Create JWT`() {
-        val adminJWT = MockChatApiRepository.login(true)
-        val userJWT = MockChatApiRepository.login(false)
+        val adminJWT = MockChatApi.login(true)
+        val userJWT = MockChatApi.login(false)
         print(adminJWT)
         print("\n$userJWT")
     }

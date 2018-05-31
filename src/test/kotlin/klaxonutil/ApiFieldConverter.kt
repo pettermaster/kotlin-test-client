@@ -14,7 +14,7 @@ class ApiFieldConverter : Converter<Field> {
 
     override fun fromJson(jv: JsonValue): Field {
         val fieldType = jv.objString("type")
-        val fieldName = jv.objString("testName")
+        val fieldName = jv.objString("name")
         val isArrayField = fieldType.startsWith('[')
 
         return if(isArrayField) {

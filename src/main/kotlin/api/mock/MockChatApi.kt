@@ -11,42 +11,23 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import java.util.*
 
-class MockBuggedAccessLevelRepository: API {
+class MockChatApi : API {
 
     companion object {
         val secret = "secret"
-        val quizzes: MutableList<Quiz> = mutableListOf(
-                Quiz(
-                        "Easy quiz",
-                        listOf(
-                                MultipleChoiceQuestion(
-                                        "What is 2+2?",
-                                        listOf(
-                                                QuestionAlternative("2", false),
-                                                QuestionAlternative("4", true),
-                                                QuestionAlternative("6", false)
-                                        )
-                                ),
-                                MultipleChoiceQuestion(
-                                        "What is the capital of Norway?",
-                                        listOf(
-                                                QuestionAlternative("Oslo", true),
-                                                QuestionAlternative("Bergen", false),
-                                                QuestionAlternative("Trondheim", false)
-                                        )
-                                )
-                        )
-                )
+        val chats: MutableList<Chat> = mutableListOf(
+                Chat("chat1", listOf("user1")),
+                Chat("chat2", listOf("user1", "user2"))
         )
 
         val users = mutableListOf(
-                User("Petter", "petter@gmail.com", "12345678"),
-                User("Edvard", "edvard@gmail.com", "23456781")
+                User("Petter", "petter@gmail.com", "12345678", false),
+                User("Edvard", "edvard@gmail.com", "23456781", true)
         )
 
         fun login(isAdmin: Boolean): JWT {
             val calendar = Calendar.getInstance()
-            calendar.add(Calendar.HOUR_OF_DAY, 1)
+            calendar.add(Calendar.DAY_OF_YEAR, 1)
 
             val accessToken = Jwts.builder()
                     .addClaims(mapOf(
@@ -59,7 +40,7 @@ class MockBuggedAccessLevelRepository: API {
                     .signWith(SignatureAlgorithm.HS512, secret)
                     .compact()
 
-            calendar.add(Calendar.DAY_OF_YEAR, 60)
+            calendar.add(Calendar.DAY_OF_YEAR, 90)
 
             val refreshToken = Jwts.builder()
                     .setExpiration(calendar.time)
@@ -71,19 +52,22 @@ class MockBuggedAccessLevelRepository: API {
         }
     }
 
-    override fun get(relativePath: String, jwt: JWT): ApiResponse {
-        if(!validJwt(jwt)) {
+    override fun get(relativePath: String, accessToken: String): ApiResponse {
+        if(!validAccessToken(accessToken)) {
             return ApiResponse.Error(HttpMethod.GET, ResponseCode.UNAUTHORIZED, "Invalid token")
         }
+        if(!validAdmin(accessToken)) {
+            return ApiResponse.Error(HttpMethod.GET, ResponseCode.FORBIDDEN, "Not an administrator")
+        }
         return when (relativePath) {
-            "quizzes" -> ApiResponse.Success(HttpMethod.GET, Klaxon().toJsonString(quizzes))
+            "chats" -> ApiResponse.Success(HttpMethod.GET, Klaxon().toJsonString(chats))
             "users" -> ApiResponse.Success(HttpMethod.GET, Klaxon().toJsonString(users))
             else -> ApiResponse.Error(HttpMethod.GET, ResponseCode.NOT_FOUND, "Endpoint not found in MockRepository")
         }
     }
 
-    override fun post(relativePath: String, jwt: JWT, requestBody: JsonObject): ApiResponse {
-        if(!validJwt(jwt)) {
+    override fun post(relativePath: String, accessToken: String, requestBody: JsonObject): ApiResponse {
+        if(!validAccessToken(accessToken)) {
             return ApiResponse.Error(HttpMethod.POST, ResponseCode.UNAUTHORIZED, "Invalid token")
         }
         return when (relativePath) {
@@ -92,28 +76,25 @@ class MockBuggedAccessLevelRepository: API {
         }
     }
 
-    private fun validJwt(jwt: JWT): Boolean {
+    private fun validAccessToken(accessToken: String): Boolean {
         // TODO: Implement me
         return true
     }
 
-    private fun validAdmin(jwt: JWT): Boolean {
+    private fun validAdmin(accessToken: String): Boolean {
         // TODO: Implement me
         return true
     }
 }
 
-data class Quiz(
+data class Chat(
         val name: String,
-        val questions: List<MultipleChoiceQuestion>
+        val participantIds: List<String>
 )
 
-data class MultipleChoiceQuestion(
-        val questionText: String,
-        val options: List<QuestionAlternative>
-)
-
-data class QuestionAlternative (
-        val optionText: String,
-        val isCorrect: Boolean
+data class User(
+        val name: String,
+        val email: String,
+        val phoneNumber: String,
+        val isAdmin: Boolean
 )

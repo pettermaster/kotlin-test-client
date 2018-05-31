@@ -1,4 +1,4 @@
-import api.mock.MockChatApiRepository
+import api.mock.MockChatApi
 import klaxonutil.ApiFieldConverter
 import com.beust.klaxon.Klaxon
 import domain.ApiSpecification
@@ -68,7 +68,7 @@ class ApiModelTest {
 
     @Test
     fun `test model fields` () {
-        val testResult = DynamicApiModelTestExecutor(apiSpecification, MockChatApiRepository()).executeDynamicApiModelTest()
+        val testResult = DynamicApiModelTestExecutor(apiSpecification, MockChatApi()).executeDynamicApiModelTest()
         testResult.endpointTestResults.forEach {
             print("\n${it.relativePath}")
             it.endpointMethodTestResults.forEach {

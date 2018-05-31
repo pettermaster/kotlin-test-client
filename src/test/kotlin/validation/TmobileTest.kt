@@ -6,6 +6,7 @@ import domain.QueryParameterTest
 import klaxonutil.ApiFieldConverter
 import org.junit.BeforeClass
 import org.junit.Test
+import parseApiModelFromPath
 import static.ApiModelTestExecutor
 import java.io.File
 
@@ -13,16 +14,10 @@ class TmobileTest {
 
     companion object {
         lateinit var apiSpecification: ApiSpecification
-        @BeforeClass
         @JvmStatic
+        @BeforeClass
         fun setup() {
-            val apiModelFile = File("/Users/petteriversen/Documents/master/kotlin-client/src/tmobileApiModel.json")
-            val apiModelString = apiModelFile.readText()
-            apiSpecification = Klaxon()
-                    .converter(ApiFieldConverter())
-                    .parse<ApiSpecification>(
-                            apiModelString
-                    )!!
+            apiSpecification = parseApiModelFromPath("/Users/petteriversen/Documents/master/kotlin-client/src/tmobileApiModel.json")
         }
     }
 

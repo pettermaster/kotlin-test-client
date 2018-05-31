@@ -15,25 +15,25 @@ class DynamicApiModelTestExecutor(val apiSpecification: ApiSpecification, val ap
         return FieldTestResult(testResults)
     }
 
-    private fun executeEndpointTest(endpoint: Endpoint, userLevels: Set<UserLevel>): EndpointTestResult {
+    fun executeEndpointTest(endpoint: Endpoint, userLevels: Set<UserLevel>): EndpointTestResult {
         val testResults = endpoint.endpointMethods.map {
             executeEndpointMethodTest(endpoint.relativePath, it, endpoint.fields, userLevels)
         }
         return EndpointTestResult(endpoint.relativePath, testResults)
     }
 
-    private fun executeEndpointMethodTest(relativePath: String, endpointMethod: EndpointMethod, fields: Set<Field>, userLevels: Set<UserLevel>): EndpointMethodTestResult {
+    fun executeEndpointMethodTest(relativePath: String, endpointMethod: EndpointMethod, fields: Set<Field>, userLevels: Set<UserLevel>): EndpointMethodTestResult {
         val testResults = userLevels.map {
             executeAccessLevelTest(relativePath, it, fields, endpointMethod.httpMethod)
         }
         return EndpointMethodTestResult(endpointMethod.httpMethod, testResults)
     }
 
-    private fun executeAccessLevelTest(relativePath: String, userLevel: UserLevel, endpointFields: Set<Field>, httpMethod: HttpMethod): UserLevelTestResult {
+    fun executeAccessLevelTest(relativePath: String, userLevel: UserLevel, endpointFields: Set<Field>, httpMethod: HttpMethod): UserLevelTestResult {
         val requestBody = generateRequestBody(endpointFields)
         val response = when(httpMethod) {
-            HttpMethod.GET -> api.get(relativePath, userLevel.jwt)
-            HttpMethod.POST -> api.post(relativePath, userLevel.jwt, requestBody)
+            HttpMethod.GET -> api.get(relativePath, userLevel.jwt.accessToken)
+            HttpMethod.POST -> api.post(relativePath, userLevel.jwt.accessToken, requestBody)
         }
         return when(response) {
             is ApiResponse.Success -> parseResponse(userLevel.name, response.httpMethod, response.jsonString, endpointFields, requestBody) //todo requestbody should not need to be passed for GET, but gets the job done for now..
@@ -61,6 +61,7 @@ class DynamicApiModelTestExecutor(val apiSpecification: ApiSpecification, val ap
         if(parsedServerResponse == null) return UserLevelTestResult.ServerError(userLevelName, ApiResponse.Error(HttpMethod.GET, ResponseCode.UNKNOWN_ERROR, "Parsed server response was empty, but with a positive response code"))
         val getFieldTests = parsedServerResponse.keys.map { key ->
             val responseValue = parsedServerResponse.map[key]
+
             GetFieldTest(key, responseValue != null)
         }
         return UserLevelTestResult.GetSuccess(userLevelName, getFieldTests)
