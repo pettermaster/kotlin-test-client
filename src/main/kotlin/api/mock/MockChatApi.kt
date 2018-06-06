@@ -11,7 +11,7 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import java.util.*
 
-class MockApiRepository: API {
+class MockChatApi : API {
 
     companion object {
         val secret = "secret"
@@ -21,8 +21,8 @@ class MockApiRepository: API {
         )
 
         val users = mutableListOf(
-                User("Petter", "petter@gmail.com", "12345678"),
-                User("Edvard", "edvard@gmail.com", "23456781")
+                User("Petter", "petter@gmail.com", "12345678", false),
+                User("Edvard", "edvard@gmail.com", "23456781", true)
         )
 
         fun login(isAdmin: Boolean): JWT {
@@ -52,11 +52,11 @@ class MockApiRepository: API {
         }
     }
 
-    override fun get(relativePath: String, jwt: JWT): ApiResponse {
-        if(!validJwt(jwt)) {
+    override fun get(relativePath: String, accessToken: String): ApiResponse {
+        if(!validAccessToken(accessToken)) {
             return ApiResponse.Error(HttpMethod.GET, ResponseCode.UNAUTHORIZED, "Invalid token")
         }
-        if(!validAdmin(jwt)) {
+        if(!validAdmin(accessToken)) {
             return ApiResponse.Error(HttpMethod.GET, ResponseCode.FORBIDDEN, "Not an administrator")
         }
         return when (relativePath) {
@@ -66,8 +66,8 @@ class MockApiRepository: API {
         }
     }
 
-    override fun post(relativePath: String, jwt: JWT, requestBody: JsonObject): ApiResponse {
-        if(!validJwt(jwt)) {
+    override fun post(relativePath: String, accessToken: String, requestBody: JsonObject): ApiResponse {
+        if(!validAccessToken(accessToken)) {
             return ApiResponse.Error(HttpMethod.POST, ResponseCode.UNAUTHORIZED, "Invalid token")
         }
         return when (relativePath) {
@@ -76,13 +76,25 @@ class MockApiRepository: API {
         }
     }
 
-    private fun validJwt(jwt: JWT): Boolean {
+    private fun validAccessToken(accessToken: String): Boolean {
         // TODO: Implement me
         return true
     }
 
-    private fun validAdmin(jwt: JWT): Boolean {
+    private fun validAdmin(accessToken: String): Boolean {
         // TODO: Implement me
         return true
     }
 }
+
+data class Chat(
+        val name: String,
+        val participantIds: List<String>
+)
+
+data class User(
+        val name: String,
+        val email: String,
+        val phoneNumber: String,
+        val isAdmin: Boolean
+)

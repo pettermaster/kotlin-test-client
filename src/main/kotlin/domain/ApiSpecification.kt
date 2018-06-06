@@ -1,6 +1,6 @@
 package domain
 
-data class ApiModel(
+data class ApiSpecification(
         val rootUrl: String,
         val endpoints: Set<Endpoint>,
         val userLevels: Set<UserLevel>

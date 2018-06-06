@@ -1,11 +1,12 @@
+import api.mock.MockChatApi
 import klaxonutil.ApiFieldConverter
 import com.beust.klaxon.Klaxon
-import domain.ApiModel
+import domain.ApiSpecification
 import domain.QueryParameterTest
 import domain.GetFieldTest
 import domain.PostFieldTest
 import domain.UserLevelTestResult
-import dynamic.executeDynamicApiModelTest
+import dynamic.DynamicApiModelTestExecutor
 import org.junit.BeforeClass
 import org.junit.Test
 import static.ApiModelTestExecutor
@@ -15,15 +16,15 @@ class ApiModelTest {
 
 
     companion object {
-        lateinit var apiModel: ApiModel
+        lateinit var apiSpecification: ApiSpecification
         @BeforeClass
         @JvmStatic
         fun setup() {
             val apiModelFile = File("/Users/petteriversen/Documents/master/kotlin-client/src/sampleApiModel.json")
             val apiModelString = apiModelFile.readText()
-            apiModel = Klaxon()
+            apiSpecification = Klaxon()
                     .converter(ApiFieldConverter())
-                    .parse<ApiModel>(
+                    .parse<ApiSpecification>(
                             apiModelString
                     )!!
         }
@@ -32,7 +33,7 @@ class ApiModelTest {
     @Test
     fun `parses valid apimodel`() {
         val expectedApiRootUrl = "https://api.mychatapp.com/v1"
-        assert(apiModel.rootUrl == expectedApiRootUrl, { "Expected $expectedApiRootUrl, got ${apiModel.rootUrl}" })
+        assert(apiSpecification.rootUrl == expectedApiRootUrl, { "Expected $expectedApiRootUrl, got ${apiSpecification.rootUrl}" })
     }
 
     @Test
@@ -42,7 +43,7 @@ class ApiModelTest {
                 "password"
         )
 
-        val testResult = ApiModelTestExecutor().executeTest(apiModel, queryParameterDict)
+        val testResult = ApiModelTestExecutor().executeTest(apiSpecification, queryParameterDict)
         testResult.endpointTests.forEach {
             System.out.print("\n\t${it.endpoint.relativePath}")
             it.endpointMethodTests.forEach {
@@ -67,7 +68,7 @@ class ApiModelTest {
 
     @Test
     fun `test model fields` () {
-        val testResult = executeDynamicApiModelTest(apiModel)
+        val testResult = DynamicApiModelTestExecutor(apiSpecification, MockChatApi()).executeDynamicApiModelTest()
         testResult.endpointTestResults.forEach {
             print("\n${it.relativePath}")
             it.endpointMethodTestResults.forEach {
