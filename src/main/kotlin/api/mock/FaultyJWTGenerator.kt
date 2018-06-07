@@ -9,7 +9,7 @@ class FaultyJWTGenerator {
     companion object {
         fun createInsecureJwt(isAdmin: Boolean): JWT {
             val calendar = Calendar.getInstance()
-            calendar.add(Calendar.DAY_OF_YEAR, 30)
+            calendar.add(Calendar.YEAR, 30)
 
             val accessToken = Jwts.builder()
                     .addClaims(mapOf(
@@ -19,15 +19,15 @@ class FaultyJWTGenerator {
                     ))
                     .setExpiration(calendar.time)
                     .setIssuedAt(Date())
-                    .signWith(SignatureAlgorithm.NONE, "")
+                    .signWith(SignatureAlgorithm.HS512, "secret")
                     .compact()
 
-            calendar.add(Calendar.DAY_OF_YEAR, 3000)
+            calendar.add(Calendar.YEAR, 3000)
 
             val refreshToken = Jwts.builder()
                     .setExpiration(calendar.time)
                     .setIssuedAt(Date())
-                    .signWith(SignatureAlgorithm.NONE, "")
+                    .signWith(SignatureAlgorithm.HS512, "secret")
                     .compact()
 
             return JWT(accessToken, refreshToken)

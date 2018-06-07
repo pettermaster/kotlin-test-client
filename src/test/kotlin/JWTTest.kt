@@ -1,3 +1,4 @@
+import api.mock.FaultyJWTGenerator
 import domain.ApiSpecification
 import com.beust.klaxon.Klaxon
 import klaxonutil.ApiFieldConverter
@@ -16,7 +17,7 @@ class JWTTest {
         @BeforeClass
         @JvmStatic
         fun setup() {
-            val apiModelFile = File("/Users/petteriversen/Documents/master/kotlin-client/src/sampleApiModel.json")
+            val apiModelFile = File("src/sampleApiModel.json")
             val apiModelString = apiModelFile.readText()
             apiSpecification = Klaxon()
                     .converter(ApiFieldConverter())
@@ -28,8 +29,8 @@ class JWTTest {
 
     @Test
     fun `Create JWT`() {
-        val adminJWT = MockChatApi.login(true)
-        val userJWT = MockChatApi.login(false)
+        val adminJWT = FaultyJWTGenerator.createInsecureJwt(true)
+        val userJWT = FaultyJWTGenerator.createInsecureJwt(false)
         print(adminJWT)
         print("\n$userJWT")
     }

@@ -12,7 +12,7 @@ class ExposedSensitiveDataTest {
         @BeforeClass
         @JvmStatic
         fun setup() {
-            apiSpecification = parseApiModelFromPath("/Users/petteriversen/Documents/master/kotlin-client/src/sampleApiModel.json")
+            apiSpecification = parseApiModelFromPath("src/sampleApiModel.json")
         }
     }
 
