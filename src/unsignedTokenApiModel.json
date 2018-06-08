@@ -1,0 +1,14 @@
+{
+  "rootUrl": "https://api.mychatapp.com/v1",
+  "userLevels": [
+    {
+      "name": "test",
+      "jwt": {
+        "accessToken": "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.",
+        "refreshToken": "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ."
+      }
+    }
+  ],
+  "endpoints": [
+  ]
+}

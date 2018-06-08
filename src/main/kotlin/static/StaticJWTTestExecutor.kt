@@ -175,7 +175,7 @@ class StaticJWTTestExecutor(val testConfiguration: StaticJWTTestConfiguration) {
 
     fun testUnsignedToken(token: String, tokenTypeDescription: String): JWTTestResult {
         val testName = "No unsigned token"
-        val testDescription = "Secure JWTs must be signed using one of the known algorithms."
+        val testDescription = "Secure JWTs must not be signed using one of the 'none' algorithm."
         val decodedAccessToken = com.auth0.jwt.JWT.decode(token)
         val decodedHeader = createClaimMapFromBase64EncodedJson(decodedAccessToken.header)
         val alg = decodedHeader.getValue("alg")

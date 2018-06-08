@@ -12,7 +12,7 @@ class InsecureDurationTest {
         @BeforeClass
         @JvmStatic
         fun setup() {
-            apiSpecification = parseApiModelFromPath("/Users/petteriversen/Documents/master/kotlin-client/src/unsignedTokenApiModel.json")
+            apiSpecification = parseApiModelFromPath("src/unsignedTokenApiModel.json")
         }
     }
 

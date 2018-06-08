@@ -17,7 +17,8 @@ class TmobileTest {
         @JvmStatic
         @BeforeClass
         fun setup() {
-            apiSpecification = parseApiModelFromPath("/Users/petteriversen/Documents/master/kotlin-client/src/tmobileApiModel.json")
+            val absolutePath = File("src/tmobileApiModel.json").absolutePath
+            apiSpecification = parseApiModelFromPath(absolutePath)
         }
     }
 

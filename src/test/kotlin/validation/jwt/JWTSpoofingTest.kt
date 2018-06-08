@@ -16,7 +16,7 @@ class JWTSpoofingTest {
         @BeforeClass
         @JvmStatic
         fun setup() {
-            val apiModelFile = File("/Users/petteriversen/Documents/master/kotlin-client/src/sampleApiModel.json")
+            val apiModelFile = File("src/sampleApiModel.json")
             val apiModelString = apiModelFile.readText()
             apiSpecification = Klaxon()
                     .converter(ApiFieldConverter())

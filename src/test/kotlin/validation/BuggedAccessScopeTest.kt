@@ -20,7 +20,7 @@ class BuggedAccessScopeTest {
         @BeforeClass
         @JvmStatic
         fun setup() {
-            val apiModelFile = File("/Users/petteriversen/Documents/master/kotlin-client/src/buggedAccessScopeApiModel.json")
+            val apiModelFile = File("src/buggedAccessScopeApiModel.json")
             val apiModelString = apiModelFile.readText()
             apiSpecification = Klaxon()
                     .converter(ApiFieldConverter())
